@@ -4,6 +4,7 @@ import React from 'react'
 import { BankTabItem } from './BankTabItem'
 import BankInfo from './BankInfo'
 import TransactionsTable from './TransactionsTable'
+import { Pagination } from './Pagination'
 
 const RecentTransactions = ({
     accounts,
@@ -11,14 +12,19 @@ const RecentTransactions = ({
     appwriteItemId,
     page=1,
 }:RecentTransactionsProps) => {
+    const rowPerPage = 10;
+    const totalPages = Math.ceil(transactions.length / rowPerPage);
+    const indexOflastTransaction = page * rowPerPage;
+    const indexOfFirstTransaction = indexOflastTransaction -  rowPerPage;
+
+    const currentTransactions = transactions.slice( indexOfFirstTransaction,indexOflastTransaction);
   return (
     <section className='recent-transactions'>
         <header className='flex items-center justify-between'>
             <h2 className='recennt-transactions-label'>
                 Recent Transactions
             </h2>
-            <Link href={`/transactions-history/?id=$
-            {appwriteItemId}`} className='view-all-btn'>View all</Link>
+            <Link href={`/transaction-history/?id=${appwriteItemId}`} className='view-all-btn'>View all</Link>
         </header>
         
         <Tabs defaultValue={appwriteItemId} className='w-full'>
@@ -42,7 +48,13 @@ const RecentTransactions = ({
                         <BankInfo account={account}
                         appwriteItemId={appwriteItemId}
                         type="full" />
-                        <TransactionsTable transactions={transactions} />
+                        <TransactionsTable transactions={currentTransactions} />
+
+                        {totalPages > 1  &&(
+                             <div className='my-4 w-full'>
+                             <Pagination totalPages={totalPages} page={page} />
+                             </div>
+                        )}
                     </TabsContent>
                 ))
             }

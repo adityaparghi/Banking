@@ -387,3 +387,16 @@
   }
  
 } */
+
+
+
+@layer base {}
+
+
+
+@layer base {
+  * {
+    @apply border-gray-500;
+  }
+ 
+} 
